@@ -300,7 +300,7 @@ def theme_view(theme):
   isnum = theme not in unlocks_board
   clear()
   if isnum:
-    if theme not in unlocks_num: theme = 'default'
+    if theme not in unlocks_num and theme != 'ccs': theme = 'default'
     if theme!='ccs':
       D = num_theme(theme)
     for i in descs[theme]:
@@ -312,9 +312,9 @@ def theme_view(theme):
     print(f"{descs[theme][1]:^53}")
   sys.stdout.flush()
   time.sleep(1)
-  print('\n\n\033[0m[Enter to exit]\n['+("\033[38;5;123m'e' to equip this theme!" if theme not in achieve["selected"] else "\033[38;5;33mtheme already equipped!")+'\033[0m]')
+  print('\n\n\033[0m[Enter to exit]\n['+(("\033[38;5;123m'e' to equip this theme!" if theme not in achieve["selected"] else "\033[38;5;33mtheme already equipped!") if theme!='ccs' else '')+'\033[0m]')
   inp = getkey().lower()
-  if inp == 'e':
+  if inp == 'e' and theme!='ccs':
     achieve['selected'][0 if isnum else 1] = theme
     clear()
     save()
@@ -392,6 +392,7 @@ def inv(): #view inventory here
     print(thestr)
     if 'name_cust' in achieve['unlocks']:
       print('\n'+(f'\033[38;5;{achieve["ncolor"]}m{"z) Name customization":^52}'))
+    print(f"\033[38;5;69m{'s) Cinna Coins':^52}\033[0m")
     print("\033[0m\n('x' to exit, hit num/letter to view/equip themes)")
     inp = getkey().lower()
     if inp.isdigit():
@@ -400,6 +401,8 @@ def inv(): #view inventory here
     elif inp=='z':
       if 'name_cust' in achieve['unlocks']:
         name_cust()
+    elif inp=='s':
+      theme_view("ccs")
     elif inp.isalnum():
       if inp == 'z': name_cust()
       if int(inp,36)-9>len(bthemes): continue
@@ -426,7 +429,7 @@ quests = {
   'Collector': ['cc', 400, 'Have 400ccs at once', 100],
   'Baby Love': ['end', 2222, 'End with 2222 score exactly', 2000],
   'Baby':['end', 222, 'End with 222 score exactly', 500],
-  'Perfection': ['end', 1000, 'End with 1000 score exactly', 1000],
+  'Perfection': ['end', 1002, 'End with 1002 score exactly', 1000],
   'Winner': ['high', 5000, 'Get a score over 5000', 1000],
   'Gamer': ['high', 2500, 'Get a score over 2500', 100],
   'Crazy': ['high', 2222, 'Get a score over 2222', 100]
